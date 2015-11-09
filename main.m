@@ -42,18 +42,32 @@ for row = 1:user_num
             if cmp(6) == 1
                 %Type-A: Gold-standard
                 gold_answer = get_gold_answer(cmp, db_records.gs);
+                F = 400.0;
+                K = 32;
+                gs_R = 100.0; %这里只对g-s题用一个常数定义难度值，以后需要改！
                 if gold_answer == cmp(2)
                     % Regard as the user WIN the competition
-                    
+                    S_A = 1;
                 else
                     % Lose
+                    S_A = 0;
                 end
+                % Update alpha
+                R_A = user_models.alpha{row,1};
+                R_A = R_A.back(); % Rear value
+                [R_A, ~] = elo_update(R_A, gs_R, S_A, F, K);
+                user_models.alpha{row}.pushtofront(R_A); % 最新的在最前面
+                % Re-calculate sigma_alpha
+                update_alpha_sigma(user_models, row);
+                
             else
                 %Type-C:Normal
+                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
             end
         else
             %Type-B: Trap
             ;
+        end
     end
 end
 
