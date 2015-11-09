@@ -62,11 +62,23 @@ for row = 1:user_num
                 
             else
                 %Type-C:Normal
-                %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+                
+                
             end
         else
             %Type-B: Trap
-            ;
+            orig_id = cmp(8);
+            orig_index = find(db_records.cmp(:,1) == orig_id);
+            orig_cmp_answer  = db_records.cmp(orig_index, 2);
+            if orig_cmp_answer == cmp(2)
+                % different answer
+                user_models.right_count(row) = user_models.right_count(row) + 1;
+            end
+            user_models.total_count(row) = user_models.total_count(row) + 1;
+            r_count = user_models.right_count(row);
+            t_count = user_models.total_count(row);
+            w_mark = get_wilson(r_count, t_count);
+            user_models.beta(row) = w_mark;
         end
     end
 end
