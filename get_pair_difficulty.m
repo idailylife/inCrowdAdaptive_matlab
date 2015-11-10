@@ -16,6 +16,5 @@ sigma_i = items.sigma(i);
 sigma_j = items.sigma(j);
 gamma = C_gamma * ( exp(-diff_r * diff_r) + (sigma_i+sigma_j)/C0 + m_ij);
 
-
 end
 

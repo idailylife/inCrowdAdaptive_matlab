@@ -10,6 +10,7 @@ function [] = main( config_args, db_records )
 %              .norm_n : 普通候选项个数
 %              .gs_num : gold-standard题目的个数
 %              .c_or_u : 0-只统计创新性，1-只统计实用性
+%              .F      : Glicko模型参数F
 %
 %   db_records.version : 数据库记录版本
 %             .hit     : hit记录
@@ -22,7 +23,6 @@ pair_models = init_pair(config_args.norm_n);
 
 hits = db_records.hit;
 user_num = length(hits);
-vec100 = 100 * ones(user_num, 1);
 user_models = init_user(100, 100, 0, user_num);
 
 for row = 1:user_num
@@ -62,7 +62,20 @@ for row = 1:user_num
                 
             else
                 %Type-C:Normal
+                %Update pair model (`m` value)
+                answer  = cmp(2);
+                id0 = cmp(3);
+                id1 = cmp(4);
+                update_pair_difficulty(id0, id1, answer, ans_count_model, pair_models);                
                 
+                %Get user ability
+                alpha = user_models.alpha{row,1}.back();
+                beta = user_models.beta(row,1);
+                gamma = pair_models(id0, id1);
+                user_ability = get_user_ability(alpha, beta, gamma, config_args.C_B);
+                
+                %Update Glicko model w/ user ability
+                update_mdodel(item_models, user_ability, db_records.cmp, cmp_row, config_args.F, config_args.c_or_u);
                 
             end
         else
