@@ -20,7 +20,7 @@ pair_models = init_pair(config_args.norm_n, config_args.m0);
 
 hits = db_records.hit;
 user_num = length(hits);
-user_models = init_user(100, 100, 0, user_num);
+user_models = init_user(100, 100, 5, user_num);
 
 for row = 1:user_num
     % Traverse throughout all HIT records
@@ -55,7 +55,7 @@ for row = 1:user_num
                 [R_A, ~] = elo_update(R_A, gs_R, S_A, F, K);
                 user_models.alpha{row} = [R_A, user_models.alpha{row}]; % 最新的在最前面
                 % Re-calculate sigma_alpha
-                update_alpha_sigma(user_models, row);
+                user_models = update_alpha_sigma(user_models, row);
                 
             else
                 %Type-C:Normal
@@ -63,16 +63,16 @@ for row = 1:user_num
                 answer  = cmp(2);
                 id0 = cmp(3);
                 id1 = cmp(4);
-                update_pair_difficulty(id0, id1, answer, ans_count_model, pair_models);                
+                pair_models = update_pair_difficulty(id0, id1, answer, ans_count_model, pair_models);                
                 
                 %Get user ability
-                alpha = user_models.alpha{row,1}.back();
+                alpha = user_models.alpha{row,1}(1);
                 beta = user_models.beta(row,1);
-                gamma = pair_models(id0, id1);
+                gamma = get_pair_difficulty(item_models, pair_models, id0, id1, config_args.C_gamma); %pair_models(id0, id1);
                 user_ability = get_user_ability(alpha, beta, gamma, config_args.C_B);
                 
                 %Update Glicko model w/ user ability
-                update_mdodel(item_models, user_ability, db_records.cmp, cmp_row, config_args.F, config_args.c_or_u);
+                item_models = update_glicko(item_models, user_ability, db_records.cmp, cmp_row, config_args.F, config_args.c_or_u);
                 
             end
         else
