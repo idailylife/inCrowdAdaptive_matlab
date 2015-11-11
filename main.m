@@ -1,14 +1,11 @@
 function [] = main( config_args, db_records )
 %Read config arguments and start a new session of test
-%   config_args.nOfQSet: 每组的题量
-%              .th_A   : 问题比例分配阈值A
-%              .th_B   : 问题比例分配阈值B
+%   config_args.
 %              .m0     : 一致性因子初始值m0
 %              .sigma_A: A类题不确定度常量
 %              .C_gamma: 获取问题难度值公式的常量
 %              .C_B    : 参与者评价可信度公式常量
-%              .norm_n : 普通候选项个数
-%              .gs_num : gold-standard题目的个数
+%              .norm_n : 普通候选项个数 （河姆渡杯是551）
 %              .c_or_u : 0-只统计创新性，1-只统计实用性
 %              .F      : Glicko模型参数F
 %
