@@ -4,8 +4,8 @@ function [ user_model ] = init_user( alpha, sigma_alpha, beta, size )
 user_model.alpha = cell(size, 1);
 for i = 1:size
     % Initialize alpha arrays
-    user_model.alpha{i,1} = CList;
-    user_model.alpha{i,1}.pushtorear(alpha);
+    user_model.alpha{i,1} = [];
+    user_model.alpha{i,1}(1) = alpha;
 end
 
 user_model.sigma_alpha = sigma_alpha * ones(size, 1);

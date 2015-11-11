@@ -51,9 +51,9 @@ for row = 1:user_num
                 end
                 % Update alpha
                 R_A = user_models.alpha{row,1};
-                R_A = R_A(1); % Rear value
+                R_A = cell2num(R_A.back()); % Rear value
                 [R_A, ~] = elo_update(R_A, gs_R, S_A, F, K);
-                user_models.alpha{row} = [R_A, user_models.alpha{row}]; % 最新的在最前面
+                user_models.alpha{row} = [; % 最新的在最前面
                 % Re-calculate sigma_alpha
                 update_alpha_sigma(user_models, row);
                 
