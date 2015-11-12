@@ -20,12 +20,13 @@ pair_models = init_pair(config_args.norm_n, config_args.m0);
 
 hits = db_records.hit;
 user_num = length(hits);
-user_models = init_user(100, 100, 5, user_num);
+user_models = init_user(100, 100, 0.5, user_num);
 
 for row = 1:user_num
     % Traverse throughout all HIT records
     cmp_ids_str = hits{row, 8}; % String of ids of comparisons
-    cmp_ids = cell2mat( loadjson(cmp_ids_str) );
+    cmp_ids = cell2numary( loadjson(cmp_ids_str) );
+    
     min_id = min(cmp_ids);
     min_index = find(db_records.cmp(:,1) == min_id);
     for cmp_row = min_index:min_index + length(cmp_ids) - 1
@@ -81,7 +82,7 @@ for row = 1:user_num
             orig_index = find(db_records.cmp(:,1) == orig_id);
             orig_cmp_answer  = db_records.cmp(orig_index, 2);
             if orig_cmp_answer == cmp(2)
-                % different answer
+                % The same answer
                 user_models.right_count(row) = user_models.right_count(row) + 1;
             end
             user_models.total_count(row) = user_models.total_count(row) + 1;

@@ -1,6 +1,10 @@
-function [ wilson_floor ] = get_wilson( right_count, total_count, z=1.96 )
+function [ wilson_floor ] = get_wilson( right_count, total_count, z )
 %GET_WILSON 威尔逊区间的下限值
 %   Detailed explanation goes here
+if nargin == 2
+    z = 1.96;
+end
+
 if total_count <= 0
     warning('TOTAL_COUNT <= 0');
 end
